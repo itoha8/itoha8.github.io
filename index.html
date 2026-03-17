@@ -1,58 +1,47 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>八曜日診断</title>
-<style>
-body {
-  font-family: sans-serif;
-  text-align: center;
-  background: #f5f5f5;
-}
-.box {
-  background: white;
-  padding: 30px;
-  margin: 50px auto;
-  width: 300px;
-  border-radius: 10px;
-}
-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-}
-</style>
-</head>
+const result = [
+`日曜日生まれ
+・リーダー気質で目立つ存在
+・プライドが高く頑張り屋
+・周りを引っ張る力あり`,
 
-<body>
+`月曜日生まれ
+・優しく共感力が高い
+・感情に敏感で繊細
+・人間関係が人生の鍵`,
 
-<div class="box">
-  <h2>八曜日診断</h2>
-  <p>生年月日を入力してください</p>
+`火曜日生まれ
+・行動力があり即決タイプ
+・負けず嫌いで努力家
+・エネルギーが強い`,
 
-  <input type="date" id="birth"><br><br>
-  <button onclick="check()">診断する</button>
+`水曜日生まれ
+・知的で分析力が高い
+・冷静で論理的
+・コミュニケーション能力が高い`,
 
-  <h3 id="result"></h3>
-</div>
+`木曜日生まれ
+・自由人でマイペース
+・発想力が豊か
+・縛られるのが苦手`,
 
-<script>
-function check() {
-  const birth = new Date(document.getElementById("birth").value);
-  const day = birth.getDay();
+`金曜日生まれ
+・美意識が高く魅力的
+・人に好かれる愛され体質
+・楽しいことが大好き
 
-  const result = [
-    "日曜日生まれ",
-    "月曜日生まれ",
-    "火曜日生まれ",
-    "水曜日生まれ",
-    "木曜日生まれ",
-    "金曜日生まれ",
-    "土曜日生まれ"
-  ];
+【恋愛】
+・愛されたい気持ちが強い
+・甘え上手
 
-  document.getElementById("result").innerText = result[day];
-}
-</script>
+【仕事】
+・美容・接客・クリエイティブ系◎
 
-</body>
-</html>
+【注意】
+・流されやすい
+・お金の使いすぎ注意`,
+
+`土曜日生まれ
+・努力型でコツコツタイプ
+・責任感が強い
+・遅咲きだが成功する`
+];
