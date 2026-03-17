@@ -1,47 +1,89 @@
-const result = [
-`日曜日生まれ
-・リーダー気質で目立つ存在
-・プライドが高く頑張り屋
-・周りを引っ張る力あり`,
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>八曜日診断</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f7f3ff;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .box {
+      background: #ffffff;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    h1 {
+      color: #6b4fb3;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #555;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #8f6de0;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 12px 20px;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    #result {
+      margin-top: 24px;
+      font-size: 22px;
+      color: #6b4fb3;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>八曜日診断</h1>
+    <p>生年月日を入力してください</p>
+    <input type="date" id="birth"><br>
+    <button onclick="checkBirthday()">診断する</button>
+    <div id="result"></div>
+  </div>
 
-`月曜日生まれ
-・優しく共感力が高い
-・感情に敏感で繊細
-・人間関係が人生の鍵`,
+  <script>
+    function checkBirthday() {
+      const birthValue = document.getElementById("birth").value;
+      if (!birthValue) {
+        document.getElementById("result").textContent = "生年月日を入力してください";
+        return;
+      }
 
-`火曜日生まれ
-・行動力があり即決タイプ
-・負けず嫌いで努力家
-・エネルギーが強い`,
+      const birth = new Date(birthValue);
+      const day = birth.getDay();
 
-`水曜日生まれ
-・知的で分析力が高い
-・冷静で論理的
-・コミュニケーション能力が高い`,
+      const results = [
+        "日曜日生まれ",
+        "月曜日生まれ",
+        "火曜日生まれ",
+        "水曜日生まれ",
+        "木曜日生まれ",
+        "金曜日生まれ",
+        "土曜日生まれ"
+      ];
 
-`木曜日生まれ
-・自由人でマイペース
-・発想力が豊か
-・縛られるのが苦手`,
-
-`金曜日生まれ
-・美意識が高く魅力的
-・人に好かれる愛され体質
-・楽しいことが大好き
-
-【恋愛】
-・愛されたい気持ちが強い
-・甘え上手
-
-【仕事】
-・美容・接客・クリエイティブ系◎
-
-【注意】
-・流されやすい
-・お金の使いすぎ注意`,
-
-`土曜日生まれ
-・努力型でコツコツタイプ
-・責任感が強い
-・遅咲きだが成功する`
-];
+      document.getElementById("result").textContent = results[day];
+    }
+  </script>
+</body>
+</html>
