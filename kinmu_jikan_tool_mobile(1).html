@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>勤務時間ツール</title>
+  <style>
+    :root {
+      --bg: #f7efe3;
+      --paper: #fffaf0;
+      --ink: #4b3b2f;
+      --line: #e3d2bd;
+      --accent: #b9895f;
+      --accent-dark: #8c6243;
+      --warn: #c0392b;
+      --ok: #4f7a52;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 18px;
+      font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      background: linear-gradient(180deg, #f4e6d2, #fbf6ec);
+      color: var(--ink);
+    }
+
+    .notebook {
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 8px 24px rgba(80, 60, 40, 0.16);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 24px 20px 18px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #fffaf0 0px,
+        #fffaf0 31px,
+        #ead8c2 32px
+      );
+      border-bottom: 2px solid var(--line);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 7vw, 34px);
+      letter-spacing: 0.06em;
+      color: var(--accent-dark);
+    }
+
+    .date {
+      font-size: 15px;
+      color: #7c6b5a;
+    }
+
+    .content {
+      padding: 22px 18px 24px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin: 4px 0 14px;
+      padding-left: 10px;
+      border-left: 5px solid var(--accent);
+    }
+
+    .input-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 7px;
+      font-size: 16px;
+    }
+
+    input[type="time"] {
+      width: 100%;
+      min-height: 54px;
+      padding: 10px 14px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      background: #fffdf8;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    button {
+      width: 100%;
+      min-height: 58px;
+      margin: 20px 0 12px;
+      border: none;
+      border-radius: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      box-shadow: 0 5px 0 var(--accent-dark);
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 var(--accent-dark);
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 18px 16px;
+      border: 2px dashed var(--line);
+      border-radius: 18px;
+      background: #fffdf8;
+      display: none;
+    }
+
+    .result.show { display: block; }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 11px 0;
+      border-bottom: 1px solid #eadfce;
+      font-size: 17px;
+    }
+
+    .row:last-child { border-bottom: none; }
+
+    .label { color: #6c5b4a; }
+    .value { font-weight: 700; text-align: right; }
+
+    .warning {
+      margin: 14px 0 4px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #fff0ed;
+      color: var(--warn);
+      font-weight: 700;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .warning.show { display: block; }
+
+    .ok-message {
+      margin: 14px 0 4px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #eef7ef;
+      color: var(--ok);
+      font-weight: 700;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .ok-message.show { display: block; }
+
+    .note {
+      margin-top: 18px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #756858;
+    }
+
+    .small-table {
+      margin-top: 18px;
+      padding: 14px;
+      background: #fff8ea;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 10px; }
+      .content { padding: 18px 14px 22px; }
+      .row {
+        flex-direction: column;
+        gap: 3px;
+        font-size: 16px;
+      }
+      .value { text-align: left; font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="notebook">
+    <header class="header">
+      <h1>勤務時間ツール</h1>
+      <div class="date" id="today"></div>
+    </header>
+
+    <section class="content">
+      <div class="section-title">今日の勤務時間</div>
+
+      <div class="input-grid">
+        <div>
+          <label for="startTime">出勤時間</label>
+          <input type="time" id="startTime" />
+        </div>
+        <div>
+          <label for="endTime">退勤時間</label>
+          <input type="time" id="endTime" />
+        </div>
+      </div>
+
+      <button onclick="calculateTime()">計算する</button>
+
+      <div class="warning" id="warning"></div>
+      <div class="ok-message" id="okMessage">休憩時間の自動警告はありません。</div>
+
+      <div class="result" id="result">
+        <div class="row"><span class="label">勤務時間</span><span class="value" id="workTime"></span></div>
+        <div class="row"><span class="label">必要な休憩</span><span class="value" id="breakTime"></span></div>
+        <div class="row"><span class="label">実働時間</span><span class="value" id="actualTime"></span></div>
+        <div class="row"><span class="label">15分単位換算</span><span class="value" id="quarterTime"></span></div>
+      </div>
+
+      <div class="small-table">
+        15分＝0.25時間<br />
+        30分＝0.50時間<br />
+        45分＝0.75時間<br />
+        75分＝1.25時間
+      </div>
+
+      <p class="note">
+        ※このツールは参考計算です。実際の休憩・給与計算は勤務先の規定に従ってください。<br />
+        ※6時間を超える場合は45分、8時間を超える場合は60分の休憩目安を表示します。<br />
+        ※15分単位換算は、1分でも超えたら次の15分枠へ切り上げます。
+      </p>
+    </section>
+  </main>
+
+  <script>
+    function setToday() {
+      const today = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+      document.getElementById('today').textContent = today.toLocaleDateString('ja-JP', options);
+    }
+
+    function formatMinutes(totalMinutes) {
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      return `${hours}時間${minutes}分`;
+    }
+
+    function calculateTime() {
+      const start = document.getElementById('startTime').value;
+      const end = document.getElementById('endTime').value;
+      const warning = document.getElementById('warning');
+      const okMessage = document.getElementById('okMessage');
+      const result = document.getElementById('result');
+
+      warning.classList.remove('show');
+      okMessage.classList.remove('show');
+      result.classList.remove('show');
+
+      if (!start || !end) {
+        warning.textContent = '出勤時間と退勤時間を入力してください。';
+        warning.classList.add('show');
+        return;
+      }
+
+      const [startH, startM] = start.split(':').map(Number);
+      const [endH, endM] = end.split(':').map(Number);
+
+      let startMinutes = startH * 60 + startM;
+      let endMinutes = endH * 60 + endM;
+
+      if (endMinutes < startMinutes) {
+        endMinutes += 24 * 60;
+      }
+
+      const totalMinutes = endMinutes - startMinutes;
+
+      if (totalMinutes <= 0) {
+        warning.textContent = '退勤時間が出勤時間より後になるように入力してください。';
+        warning.classList.add('show');
+        return;
+      }
+
+      let breakMinutes = 0;
+      let warningText = '';
+
+      if (totalMinutes > 8 * 60) {
+        breakMinutes = 60;
+        warningText = '8時間を超えています。60分休憩が必要です。担当者へ確認してください。';
+      } else if (totalMinutes > 6 * 60) {
+        breakMinutes = 45;
+        warningText = '6時間を超えています。45分休憩が必要です。担当者へ確認してください。';
+      }
+
+      const actualMinutes = totalMinutes - breakMinutes;
+      const roundedQuarterMinutes = Math.ceil(actualMinutes / 15) * 15;
+      const quarterHours = (roundedQuarterMinutes / 60).toFixed(2);
+
+      document.getElementById('workTime').textContent = formatMinutes(totalMinutes);
+      document.getElementById('breakTime').textContent = breakMinutes === 0 ? 'なし' : `${breakMinutes}分`;
+      document.getElementById('actualTime').textContent = formatMinutes(actualMinutes);
+      document.getElementById('quarterTime').textContent = `${quarterHours}時間`;
+
+      if (warningText) {
+        warning.textContent = warningText;
+        warning.classList.add('show');
+      } else {
+        okMessage.classList.add('show');
+      }
+
+      result.classList.add('show');
+    }
+
+    setToday();
+  </script>
+</body>
+</html>
